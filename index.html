@@ -131,6 +131,34 @@
 
   /* Make the "On-site: Snow and wind continue" white */
   #weatherTag, .news-mode #weatherTag { color:#fff !important; }
+  /* === Yellow highlight behind hero texts (only in news mode) === */
+.news-mode #kicker,
+.news-mode #headline,
+.news-mode #subline,
+.news-mode #newsBanner {
+  display: inline;
+  background: rgba(255, 212, 0, 0.92); /* 明亮黄底，带透明 */
+  color: #111;                         /* 深色文字对比 */
+  padding: 4px 8px;
+  border-radius: 8px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  text-shadow: none;
+}
+
+.news-mode #headline { 
+  padding: 6px 10px; 
+  border-radius: 10px; 
+}
+
+.news-mode #subline { 
+  padding: 5px 9px; 
+}
+
+.news-mode #newsBanner { 
+  margin-top: 6px; 
+  font-weight: 600; 
+}
 </style>
 </head>
 <body>
@@ -335,4 +363,5 @@ form.addEventListener('submit', async (e)=>{
 </script>
 </body>
 </html>
+
 
