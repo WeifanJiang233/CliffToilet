@@ -131,33 +131,30 @@
 
   /* Make the "On-site: Snow and wind continue" white */
   #weatherTag, .news-mode #weatherTag { color:#fff !important; }
-  /* === Yellow highlight behind hero texts (only in news mode) === */
+/* === Yellow background block for news-mode hero text === */
+.news-mode .hero-txt > div {
+  background: rgba(255, 212, 0, 0.92); /* 明亮黄色底，可调透明度 */
+  color: #111;                         /* 深色文字，增强对比 */
+  padding: 18px 22px;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  max-width: 70%;
+}
+
+/* 让文字层级清晰、阴影更明显 */
 .news-mode #kicker,
 .news-mode #headline,
 .news-mode #subline,
 .news-mode #newsBanner {
-  display: inline;
-  background: rgba(255, 212, 0, 0.92); /* 明亮黄底，带透明 */
-  color: #111;                         /* 深色文字对比 */
-  padding: 4px 8px;
-  border-radius: 8px;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
+  color: #111 !important;
   text-shadow: none;
 }
 
-.news-mode #headline { 
-  padding: 6px 10px; 
-  border-radius: 10px; 
-}
-
-.news-mode #subline { 
-  padding: 5px 9px; 
-}
-
-.news-mode #newsBanner { 
-  margin-top: 6px; 
-  font-weight: 600; 
+/* 可选：在窄屏上让框宽一点 */
+@media (max-width: 700px){
+  .news-mode .hero-txt > div { 
+    max-width: 90%;
+  }
 }
 </style>
 </head>
@@ -363,5 +360,6 @@ form.addEventListener('submit', async (e)=>{
 </script>
 </body>
 </html>
+
 
 
