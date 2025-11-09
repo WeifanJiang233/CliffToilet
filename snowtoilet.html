@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Alpine Outhouse — Field Notes</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0e14; --ink:#e9ecf1; --muted:#aeb6c7;
+    --accent:#89a8ff; --line:#273142; --paper:#121623cc;
+    --radius:20px;
+    /* news mode vars */
+    --news-bg:#fafafa; --news-ink:#101010; --news-muted:#585f6a; --news-line:#d9dbe0; --news-accent:#c40000;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;background:radial-gradient(1200px 600px at 10% -10%, #12203a 0%, #0b0e14 60%);
+    color:var(--ink); font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    transition:background .35s ease, color .35s ease;
+  }
+  .page{max-width:1100px;margin:0 auto;padding:24px;transition:color .35s ease}
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;border-radius:24px;overflow:hidden;isolation:isolate;
+    background:#0f141d; min-height:54vh; display:grid; place-items:end;
+    transition:filter .35s ease, background .35s ease;
+  }
+  .hero img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;filter:contrast(1.05) saturate(.95)}
+  .hero::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg, #0000 0%, #0b0e14a0 55%, #0b0e14 95%);
+    pointer-events:none; transition:background .35s ease;
+  }
+  .hero-txt{
+    position:relative; z-index:1; padding:28px; width:100%;
+    display:flex; align-items:flex-end; justify-content:space-between; gap:18px;
+  }
+  .kicker{letter-spacing:.14em;text-transform:uppercase;color:#9db2ff;font-weight:600;font-size:.8rem;margin:0 0 6px}
+  h1{
+    margin:0;font-family:"Playfair Display",serif;font-weight:700;
+    font-size:clamp(28px,5.2vw,56px); line-height:1.05;
+  }
+  .sub{margin:6px 0 0;color:var(--muted);font-size:clamp(14px,1.3vw,16px)}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{
+    background:#101829b3;border:1px solid #1f2a3b;color:#cfe0ff;
+    padding:8px 12px;border-radius:999px;font-size:.9rem;display:flex;gap:8px;align-items:center
+  }
+  .chip strong{font-weight:600}
+  .btn{
+    background:linear-gradient(180deg,#8aa2ff,#6a86ff); border:0; color:#fff;
+    padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600
+  }
+  .btn.secondary{
+    background:#121926; border:1px solid var(--line); color:#d7def0;
+  }
+  /* ===== GRID ===== */
+  .grid{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-top:18px}
+  @media (max-width:900px){ .grid{grid-template-columns:1fr} }
+  .card{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:18px;
+    backdrop-filter: blur(6px); transition:background .35s ease, border-color .35s ease;
+  }
+  .card h2{
+    margin:0 0 10px; font-family:"Playfair Display",serif; font-size:clamp(20px,3.6vw,28px)
+  }
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .input{display:flex;gap:8px}
+  .input input{
+    flex:1; background:#0f1420; border:1px solid var(--line); color:var(--ink);
+    padding:12px 14px;border-radius:12px
+  }
+  .muted{color:var(--muted)}
+  .pill{background:#0f1729;border:1px solid var(--line);border-radius:999px;padding:6px 10px}
+  .hint{margin-top:8px;color:#c5d2e6;font-size:.92rem}
+  .ok{color:#b8f5c6}
+  .soundboard{display:flex;gap:8px;flex-wrap:wrap}
+  .soundboard .btn{background:#1a2336;border:1px solid #28334a}
+  .soundboard .btn:hover{filter:brightness(1.08)}
+  .toast{position:fixed;right:16px;bottom:16px;background:#1a2131;border:1px solid #2a3550;color:#e8efff;
+    padding:10px 12px;border-radius:12px;opacity:0;transform:translateY(8px);transition:.25s}
+  .toast.show{opacity:1;transform:none}
+
+  /* ===== NEWS MODE ===== */
+  .news-mode body,
+  .news-mode{background:var(--news-bg); color:var(--news-ink)}
+  .news-mode .page{color:var(--news-ink)}
+  .news-mode .hero{background:#e9eef6}
+  .news-mode .hero::after{
+    background:linear-gradient(180deg, #0000 0%, #0000 55%, #00000022 95%);
+  }
+  .news-mode .kicker{
+    color:var(--news-accent);
+    letter-spacing:.18em;
+  }
+  .news-mode h1{color:var(--news-ink)}
+  .news-mode .sub{color:var(--news-muted)}
+  .news-mode .chip{
+    background:#fff;border:1px solid var(--news-line);color:#1d1f22
+  }
+  .news-mode .btn{background:var(--news-ink); color:#fff}
+  .news-mode .btn.secondary{background:#fff;border:1px solid var(--news-line);color:#111}
+  .news-mode .card{
+    background:#ffffff;border:1px solid var(--news-line);backdrop-filter:none
+  }
+  .news-banner{
+    display:none;margin:14px 0 0;font-size:.92rem;color:var(--news-muted)
+  }
+  .news-mode .news-banner{display:block}
+  .comments{display:none;margin-top:14px}
+  .news-mode .comments{display:block}
+  .comments h3{
+    font-family:"Playfair Display",serif;margin:0 0 8px;font-size:22px
+  }
+  .comment{
+    border-top:1px solid var(--news-line); padding:12px 0
+  }
+  .comment .meta{color:var(--news-muted); font-size:.9rem; margin-bottom:4px}
+
+  /* Make the "On-site: Snow and wind continue" white */
+  #weatherTag, .news-mode #weatherTag { color:#fff !important; }
+</style>
+</head>
+<body>
+<div class="page" id="pageRoot">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <img
+      id="heroImg"
+      src="https://raw.githubusercontent.com/WeifanJiang233/ToiletPublic/main/Toilet.png"
+      alt="Cliffside outhouse in a blizzard"
+    >
+    <div class="hero-txt">
+      <div>
+        <p class="kicker" id="kicker">Field Report</p>
+        <h1 id="headline">Alpine Outhouse, Edge of the World</h1>
+        <p class="sub" id="subline">A precarious wooden toilet teetering over a glacial drop, where the wind writes its own warnings.</p>
+        <p class="news-banner" id="newsBanner">Updated: Witness notes suggest structural failure followed by scavenger activity.</p>
+      </div>
+      <div class="chips">
+        <div class="chip">People nearby: <strong id="peopleNum">0</strong></div>
+        <button class="btn" id="startAudio" title="Play ambient">Play Ambient</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTENT GRID ================= -->
+  <section class="grid">
+
+    <!-- Left: Message + Soundboard + Comments -->
+    <article class="card">
+      <h2 id="leftTitle">Traveler’s Log</h2>
+      <form id="msgForm" class="input" autocomplete="off">
+        <input id="msgInput" type="text" placeholder="Type your note… (140 chars)" maxlength="140" />
+        <button class="btn" type="submit">Submit</button>
+      </form>
+      <p class="hint" id="hintTxt">Tip: don’t shout too many times—avalanches happen easily.</p>
+      <p id="lastMsg" class="ok" style="display:none;margin-top:8px;">✔️ <span></span></p>
+
+      <hr style="border:0;border-top:1px solid var(--line);margin:16px 0" />
+
+      <div class="row" style="justify-content:space-between">
+        <div>
+          <p class="muted" style="margin:0 0 6px" id="soundboardLabel">Soundboard</p>
+          <div class="soundboard">
+            <button class="btn secondary" id="btnPoo">Poo</button>
+            <button class="btn secondary" id="btnPee">Pee</button>
+            <button class="btn secondary" id="btnFart">Fart</button>
+          </div>
+        </div>
+        <div class="pill" id="weatherTag">On-site: Snow and wind continue</div>
+      </div>
+
+      <!-- COMMENTS (visible in news mode) -->
+      <div class="comments" id="commentsWrap">
+        <h3>Comments</h3>
+        <div id="commentsList">
+          <div class="comment">
+            <div class="meta">@SnowlineWatcher · 2m</div>
+            <div>With winds like that, this was only a matter of time.</div>
+          </div>
+          <div class="comment">
+            <div class="meta">@PeakRanger · 1m</div>
+            <div>Vultures circling means they’ve “read” the cliff too.</div>
+          </div>
+          <div class="comment">
+            <div class="meta">@CliffNotes · 1m</div>
+            <div>Please avoid unstable structures near drop-offs. Safety first.</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Right: Facts -->
+    <aside class="card" id="factsCard">
+      <h2 id="factsTitle">Quick Facts</h2>
+      <p class="muted" id="factsText">Perched on a narrow ledge, this timber outhouse faces relentless crosswinds. Vultures circle above the valley—locals say they read the cliff like a map.</p>
+      <ul id="factsList" style="margin:10px 0 0; padding-left:18px; line-height:1.65">
+        <li>Access: Icy path with exposed drop-offs</li>
+        <li>Best light: Storm-diffused afternoons</li>
+        <li>Hazards: Cornice breaks, fresh slab avalanches</li>
+      </ul>
+    </aside>
+
+  </section>
+</div>
+
+<div class="toast" id="toast">Saved</div>
+
+<!-- ======= AUDIO ======= -->
+<audio id="bgAudio" src="background.mp3" loop preload="auto"></audio>
+<audio id="sfxPoo" src="poo.mp3" preload="auto"></audio>
+<audio id="sfxPee" src="pee.mp3" preload="auto"></audio>
+<audio id="sfxFart" src="fart.mp3" preload="auto"></audio>
+<audio id="blizzardAudio" src="blizzard.mp3" preload="auto"></audio>
+
+<script>
+/* ---------- Toast ---------- */
+const toastEl = document.getElementById('toast');
+let tT;
+function toast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(tT);
+  tT = setTimeout(()=>toastEl.classList.remove('show'), 1400);
+}
+
+/* ---------- Ambient toggle ---------- */
+const bgAudio = document.getElementById('bgAudio');
+document.getElementById('startAudio')?.addEventListener('click', async ()=>{
+  try{ await bgAudio.play(); toast('Ambient playing'); }catch(e){}
+});
+
+/* ---------- SFX buttons ---------- */
+const playOnce = (el)=>{ el.currentTime = 0; el.play().catch(()=>{}); };
+document.getElementById('btnPoo').addEventListener('click', ()=> playOnce(document.getElementById('sfxPoo')));
+document.getElementById('btnPee').addEventListener('click', ()=> playOnce(document.getElementById('sfxPee')));
+document.getElementById('btnFart').addEventListener('click', ()=> playOnce(document.getElementById('sfxFart')));
+
+/* ---------- Message submit → blizzard; after 3 → collapsed image + NEWS MODE ---------- */
+const form = document.getElementById('msgForm');
+const input = document.getElementById('msgInput');
+const lastMsg = document.getElementById('lastMsg');
+const lastMsgText = lastMsg.querySelector('span');
+const blizzard = document.getElementById('blizzardAudio');
+const heroImg = document.getElementById('heroImg');
+const kicker = document.getElementById('kicker');
+const headline = document.getElementById('headline');
+const subline = document.getElementById('subline');
+const newsBanner = document.getElementById('newsBanner');
+const leftTitle = document.getElementById('leftTitle');
+const soundboardLabel = document.getElementById('soundboardLabel');
+const weatherTag = document.getElementById('weatherTag');
+const factsTitle = document.getElementById('factsTitle');
+const factsText = document.getElementById('factsText');
+const factsList = document.getElementById('factsList');
+const hintTxt = document.getElementById('hintTxt');
+const commentsWrap = document.getElementById('commentsWrap');
+const commentsList = document.getElementById('commentsList');
+
+let submitCount = 0;
+let collapsedShown = false;
+let newsModeOn = false;
+
+function swapToCollapsed(){
+  if (collapsedShown) return;
+  collapsedShown = true;
+  heroImg.src = "https://raw.githubusercontent.com/WeifanJiang233/ToiletPublic/main/Toilet_Collapsed.png";
+  enterNewsMode();
+  toast('Avalanche triggered');
+}
+
+function enterNewsMode(){
+  if (newsModeOn) return;
+  newsModeOn = true;
+  document.documentElement.classList.add('news-mode');
+
+  kicker.textContent = 'Breaking';
+  headline.textContent = 'Dangerous outhouse collapses, now occupied by vultures';
+  subline.textContent = 'After heavy wind and snow, the cliff-edge structure failed; vultures continue circling.';
+  newsBanner.style.display = 'block';
+
+  leftTitle.textContent = 'Incident Thread';
+  hintTxt.textContent = 'Note: keep it civil, verify your sources, and stay safe.';
+  soundboardLabel.textContent = 'Related Sounds (for reference)';
+  weatherTag.textContent = 'On-site: Snow and wind continue';
+
+  factsTitle.textContent = 'Key Points';
+  factsText.textContent = 'The outhouse stood on a narrow ridge; wind, snow, and surface ice likely contributed to structural failure.';
+  factsList.innerHTML = `
+    <li>Time: Shortly after the avalanche</li>
+    <li>Location: Wooden outhouse on a mountain cliff edge</li>
+    <li>Activity: Vultures circling overhead</li>
+  `;
+  commentsWrap.style.display = 'block';
+}
+
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const text = (input.value||'').trim();
+  try{ blizzard.currentTime = 0; await blizzard.play(); }catch(e){}
+  submitCount++;
+  if (submitCount >= 3 && !collapsedShown) swapToCollapsed();
+
+  lastMsg.style.display = 'block';
+  lastMsgText.textContent = text || '(blank)';
+
+  if (newsModeOn && text){
+    const div = document.createElement('div');
+    div.className = 'comment';
+    const now = new Date();
+    const h = now.getHours().toString().padStart(2,'0');
+    const m = now.getMinutes().toString().padStart(2,'0');
+    div.innerHTML = `<div class="meta">@You · ${h}:${m}</div><div></div>`;
+    div.querySelector('div:last-child').textContent = text;
+    commentsList.prepend(div);
+  }
+
+  input.value = '';
+  toast(newsModeOn ? 'Comment posted' : 'Message saved');
+});
+</script>
+</body>
+</html>
