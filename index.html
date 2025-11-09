@@ -22,16 +22,24 @@
     transition:background .35s ease, color .35s ease;
   }
   .page{max-width:1100px;margin:0 auto;padding:24px;transition:color .35s ease}
-  /* ===== HERO ===== */
+
+  /* ===== HERO (portrait image optimized) ===== */
   .hero{
     position:relative;border-radius:24px;overflow:hidden;isolation:isolate;
-    background:#0f141d; min-height:54vh; display:grid; place-items:end;
+    background:#0f141d; min-height:90vh; /* was 54vh */
+    display:flex; align-items:center; justify-content:center;
     transition:filter .35s ease, background .35s ease;
   }
-  .hero img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;filter:contrast(1.05) saturate(.95)}
+  .hero img{
+    width:auto; height:100%; max-height:100%;
+    object-fit:contain; /* show the full tall image */
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    background:#000;
+  }
   .hero::after{
     content:""; position:absolute; inset:0;
-    background:linear-gradient(180deg, #0000 0%, #0b0e14a0 55%, #0b0e14 95%);
+    /* push the gradient lower since image is tall */
+    background:linear-gradient(180deg, #0000 0%, #0b0e14a0 70%, #0b0e14 98%);
     pointer-events:none; transition:background .35s ease;
   }
   .hero-txt{
@@ -57,6 +65,7 @@
   .btn.secondary{
     background:#121926; border:1px solid var(--line); color:#d7def0;
   }
+
   /* ===== GRID ===== */
   .grid{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-top:18px}
   @media (max-width:900px){ .grid{grid-template-columns:1fr} }
@@ -214,8 +223,8 @@
 <!-- ======= AUDIO ======= -->
 <audio id="bgAudio" src="https://raw.githubusercontent.com/WeifanJiang233/CliffToilet/main/ambience.ogg" preload="auto"></audio>
 <audio id="sfxPoo" src="https://raw.githubusercontent.com/WeifanJiang233/ToiletPublic/main/poo.mp3" preload="auto"></audio>
-<audio id="sfxPee" src="https://raw.githubusercontent.com/WeifanJiang233/ToiletPublic/main/pee.mp3" preload="auto"></audio>
-<audio id="sfxFart" src="https://raw.githubusercontent.com/WeifanJiang233/ToiletPublic/main/fart.mp3" preload="auto"></audio>
+<audio id="sfxPee" src="https://raw.githubusercontent.com/WeifanJiang233/ToiletPublic/main/pee.wav" preload="auto"></audio>
+<audio id="sfxFart" src="https://raw.githubusercontent.com/WeifanJiang233/ToiletPublic/main/fart.wav" preload="auto"></audio>
 <audio id="blizzardAudio" src="https://raw.githubusercontent.com/WeifanJiang233/CliffToilet/main/blizzard.mp3" preload="auto"></audio>
 
 <script>
@@ -326,5 +335,4 @@ form.addEventListener('submit', async (e)=>{
 </script>
 </body>
 </html>
-
 
